@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import CreateEvent from "./pages/CreateEvent"
+import CreateEvent from "./pages/CreateEvent.jsx"
 import SignIn from "./pages/SignIn"
 
 class App extends Component {
@@ -10,8 +10,8 @@ class App extends Component {
       <BrowserRouter>
 
           <Switch>
-            <Route path="/" exact>Home</Route>
-            <Route path="/signin" exact>SignIn</Route>
+            <Route path="/" component={CreateEvent} exact/>
+            <Route path="/signin" component={SignIn} exact/>
             <Route>Page not found</Route>
           </Switch>
       </BrowserRouter>
