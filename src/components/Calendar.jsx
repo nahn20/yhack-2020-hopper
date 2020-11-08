@@ -60,6 +60,7 @@ class Calendar extends Component {
         }
         return (
             <React.Fragment>
+            {MONTH_NAME_LOOKUP[this.state.month][1]} {this.state.year}
             <table style={tableStyle}>
                 <thead>
                     <tr style={tableStyle}>
