@@ -38,6 +38,11 @@ class Calendar extends Component {
             mouseMode: 0, //0 for not clicked, 1 for clicking and turning green, -1 for clicking and turning red
         }
     }
+    updateMouseMode = (value) => {
+        let state = this.state;
+        state.mouseMode = value;
+        this.setState(state);
+    }
     componentDidMount = () => {
         // document.onmousedown = () => {
         //     let state = this.state;
@@ -49,11 +54,6 @@ class Calendar extends Component {
             state.mouseMode = 0;
             this.setState(state);
         }
-    }
-    updateMouseMode = (value) => {
-        let state = this.state;
-        state.mouseMode = value;
-        this.setState(state);
     }
     render() {
         let weekdays = [];
@@ -69,13 +69,12 @@ class Calendar extends Component {
             }
             let weekday = i % 7;
             let week = Math.floor(i / 7);
-            dates[week][weekday] = <td style={tableStyle} key={i}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode} content={date}/></td>
+            dates[week][weekday] = <td style={tableStyle} key={i}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode}>{date}</CellComponent></td>
         }
         let formattedDates = [];
         for(let i = 0; i < dates.length; i++){
             formattedDates[i] = <tbody key={i}><tr>{dates[i]}</tr></tbody>
         }
-        let style = combine_dicts(tableStyle, {fontSize: "40px"});
         return (
             <React.Fragment>
                 {MONTH_NAME_LOOKUP[this.state.month][1]} {this.state.year}
@@ -85,7 +84,7 @@ class Calendar extends Component {
                     msUserSelect: "none",
                     userSelect: "none",
                 }}>
-                    <table style={style}>
+                    <table style={combine_dicts(tableStyle, {fontSize: "40px"})}>
                         <thead>
                             <tr style={tableStyle}>
                                 {weekdays}

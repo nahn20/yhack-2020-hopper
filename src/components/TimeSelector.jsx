@@ -1,20 +1,6 @@
 import React, { Component } from 'react';
 import combine_dicts from '../helper';
 
-const MONTH_NAME_LOOKUP = [
-    ["Jan", "January"],
-    ["Feb", "February"],
-    ["Mar", "March"],
-    ["Apr", "April"],
-    ["May", "May"],
-    ["Jun", "June"],
-    ["Jul", "July"],
-    ["Aug", "August"],
-    ["Sep", "September"],
-    ["Oct", "October"],
-    ["Nov", "November"],
-    ["Dec", "December"]
-];
 const WEEKDAY_NAME_LOOKUP = [
     ["Sun", "Sunday"],
     ["Mon", "Monday"],
@@ -24,19 +10,31 @@ const WEEKDAY_NAME_LOOKUP = [
     ["Fri", "Friday"],
     ["Sat", "Saturday"]
 ];
-const tableStyle = {border: "1px solid black", borderCollapse: "collapse", padding: 0};
+const tableStyle = {borderCollapse: "collapse", padding: 0};
 class TimeSelector extends Component {
     constructor(props){
         super(props);
-        let month = this.props.month;
-        let year = this.props.year;
         this.state = {
-            month: month,
-            year: year,
-            firstDay: (new Date(year, month)).getDay(),
-            numDays: (32 - (new Date(year, month, 32)).getDate()),
             mouseMode: 0, //0 for not clicked, 1 for clicking and turning green, -1 for clicking and turning red
         }
+        this.allowedTimes = (this.props.allowedTimes ? this.props.allowedTimes : this.getTimeRange(6, 21))
+    }
+    getTimeRange = (start, end) => { //Takes a start and end hour (24-hour time, starts at 0) and converts into an array segmented into 15 minutes (length of 24*4)
+        let timeRange = [];
+        for(let i = 0; i < 4*24; i++){
+            if(i >= start*4 && i < end*4){
+                timeRange[i] = true;
+            }
+            else{
+                timeRange[i] = false;
+            }
+        }
+        return timeRange;
+    }
+    updateMouseMode = (value) => {
+        let state = this.state;
+        state.mouseMode = value;
+        this.setState(state);
     }
     componentDidMount = () => {
         // document.onmousedown = () => {
@@ -44,23 +42,20 @@ class TimeSelector extends Component {
         //     state.mouseDown = true;
         //     this.setState(state);
         // }
+        let existingMouseUp = document.onmouseup;
         document.onmouseup = () => {
+            existingMouseUp();
             let state = this.state;
             state.mouseMode = 0;
             this.setState(state);
         }
     }
-    updateMouseMode = (value) => {
-        let state = this.state;
-        state.mouseMode = value;
-        this.setState(state);
-    }
     render() {
-        let weekdays = [];
-        for(let i = 0; i < WEEKDAY_NAME_LOOKUP.length; i++){
-            weekdays.push(<th key={i} style={combine_dicts(tableStyle, {padding: "2px 5px"})}>{WEEKDAY_NAME_LOOKUP[i][0]}</th>)
-        }
         const CellComponent = this.props.children;
+        let times = [];
+        for(let i = 0; i < this.allowedTimes.length; i++){
+            times[i] = <tr key={i} style={tableStyle}><th style={tableStyle}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode} style={{height: "4px"}}></CellComponent></th></tr>
+        }
         return (
             <React.Fragment>
                 <div style={{
@@ -68,13 +63,18 @@ class TimeSelector extends Component {
                     WebkitUserSelect: "none",
                     msUserSelect: "none",
                     userSelect: "none",
+                    width: (this.props.width ? this.props.width : "10vw"),
                 }}>
-                    <table style={tableStyle}>
+                    <table style={combine_dicts(tableStyle, {tableLayout: "inherit", width: "100%"})}>
                         <thead>
                             <tr style={tableStyle}>
-                                {weekdays}
+                                <th>{this.props.header}</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            {times}
+                        </tbody>
+                        
                     </table>
                 </div>
             </React.Fragment>
