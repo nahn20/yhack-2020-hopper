@@ -25,7 +25,7 @@ const WEEKDAY_NAME_LOOKUP = [
     ["Sat", "Saturday"]
 ];
 const tableStyle = {border: "1px solid black", borderCollapse: "collapse", padding: 0};
-class Calendar extends Component {
+class TimeSelector extends Component {
     constructor(props){
         super(props);
         let month = this.props.month;
@@ -61,37 +61,20 @@ class Calendar extends Component {
             weekdays.push(<th key={i} style={combine_dicts(tableStyle, {padding: "2px 5px"})}>{WEEKDAY_NAME_LOOKUP[i][0]}</th>)
         }
         const CellComponent = this.props.children;
-        let dates = [[], [], [], [], []];
-        for(let i = 0; i < this.state.numDays+this.state.firstDay; i++){
-            let date = 1+i-this.state.firstDay;
-            if(i < this.state.firstDay){
-                date = "";
-            }
-            let weekday = i % 7;
-            let week = Math.floor(i / 7);
-            dates[week][weekday] = <td style={tableStyle} key={i}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode} content={date}/></td>
-        }
-        let formattedDates = [];
-        for(let i = 0; i < dates.length; i++){
-            formattedDates[i] = <tbody key={i}><tr>{dates[i]}</tr></tbody>
-        }
-        let style = combine_dicts(tableStyle, {fontSize: "40px"});
         return (
             <React.Fragment>
-                {MONTH_NAME_LOOKUP[this.state.month][1]} {this.state.year}
                 <div style={{
                     MozUserSelect: "none",
                     WebkitUserSelect: "none",
                     msUserSelect: "none",
                     userSelect: "none",
                 }}>
-                    <table style={style}>
+                    <table style={tableStyle}>
                         <thead>
                             <tr style={tableStyle}>
                                 {weekdays}
                             </tr>
                         </thead>
-                        {formattedDates}
                     </table>
                 </div>
             </React.Fragment>
@@ -99,4 +82,4 @@ class Calendar extends Component {
     }
 }
  
-export default Calendar;
+export default TimeSelector;
