@@ -69,7 +69,7 @@ class Calendar extends Component {
             }
             let weekday = i % 7;
             let week = Math.floor(i / 7);
-            dates[week][weekday] = <td style={tableStyle} key={i}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode}>{date}</CellComponent></td>
+            dates[week][weekday] = <td style={tableStyle} key={i}><CellComponent parent={this.tableRef} updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode}>{date}</CellComponent></td>
         }
         let formattedDates = [];
         for(let i = 0; i < dates.length; i++){

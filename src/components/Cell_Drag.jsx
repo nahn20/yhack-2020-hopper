@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import combine_dicts from '../helper';
 
 class Cell_Drag extends Component {
@@ -26,18 +27,17 @@ class Cell_Drag extends Component {
         state.color = (this.state.color === "red" ? "green" : "red");
         this.setState(state);
     }
-
     render() { 
         return (
             <div 
-                unselectable="on" 
-                onMouseOver={this.toggle} 
+                onMouseMove={this.toggle}
                 onMouseDown={this.onMouseDown} 
                 style={combine_dicts({
                     backgroundColor: this.state.color,
                     WebkitTransition: "background-color 0.5s",
                     transition: "background-color 0.5s",
-                    textAlign: "center"
+                    textAlign: "center",
+                    minHeight: "4px"
                 }, this.props.style)}>
 
                 {this.props.children}

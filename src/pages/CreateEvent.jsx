@@ -8,7 +8,8 @@ class CreateEvent extends Component {
         return (
             <div>
                 <Calendar month={10} year={2020}>{Cell_Drag}</Calendar>
-                <table style={{marginTop: "10%", borderCollapse: "collapse", padding: 0}}>
+                <TimeSelector header="Sun">{Cell_Drag}</TimeSelector>
+                {/* <table style={{marginTop: "10%", borderCollapse: "collapse", padding: 0}}>
                     <tbody>
                         <tr>
                             <td style={{margin: 0, padding: 0}}><TimeSelector header="Sun">{Cell_Drag}</TimeSelector></td>
@@ -21,7 +22,7 @@ class CreateEvent extends Component {
                         </tr>
                     </tbody>
 
-                </table>
+                </table> */}
                 
             </div>
         );

@@ -17,7 +17,7 @@ class TimeSelector extends Component {
         this.state = {
             mouseMode: 0, //0 for not clicked, 1 for clicking and turning green, -1 for clicking and turning red
         }
-        this.allowedTimes = (this.props.allowedTimes ? this.props.allowedTimes : this.getTimeRange(6, 21))
+        this.allowedTimes = (this.props.allowedTimes ? this.props.allowedTimes : this.getTimeRange(6, 21));
     }
     getTimeRange = (start, end) => { //Takes a start and end hour (24-hour time, starts at 0) and converts into an array segmented into 15 minutes (length of 24*4)
         let timeRange = [];
@@ -54,7 +54,9 @@ class TimeSelector extends Component {
         const CellComponent = this.props.children;
         let times = [];
         for(let i = 0; i < this.allowedTimes.length; i++){
-            times[i] = <tr key={i} style={tableStyle}><th style={tableStyle}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode} style={{height: "4px"}}></CellComponent></th></tr>
+            if(this.allowedTimes[i]){
+                times[i] = <div key={i}><CellComponent updateMouseMode={this.updateMouseMode} mouseMode={this.state.mouseMode} style={{height: "4px"}}></CellComponent></div>
+            }
         }
         return (
             <React.Fragment>
