@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Calendar from '../components/Calendar';
 import Cell_Drag from '../components/Cell_Drag';
 import TimeSelector from '../components/TimeSelector';
+import './createEvent.css';
 
 class CreateEvent extends Component {
     render() { 
