@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import CreateEvent from "./pages/CreateEvent.jsx"
-import SignIn from "./pages/SignIn"
+import CreateEvent from "./pages/CreateEvent.jsx";
+import SignIn from "./pages/SignIn";
 
 class App extends Component {
   render(){
