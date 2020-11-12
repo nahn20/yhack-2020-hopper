@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react';
+import '../font.css';
 
 //Scrolling works other stuff don't
 const HEADER_HEIGHT = 20;
@@ -8,7 +9,7 @@ const COLORS = {
     "yes": "rgb(112, 219, 112)",
     "unavailable": "white"
 }
-const COLUMN_HEADERS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const COLUMN_HEADERS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 class TimeSelector_Canvas extends Component {
     constructor(props){
         super(props);
@@ -18,7 +19,7 @@ class TimeSelector_Canvas extends Component {
         this.cellHeight = this.props.cellHeight ? this.props.cellHeight : 10;
         this.y = 0;
         this.cellsAcross = this.props.cellsAcross ? this.props.cellsAcross : 1;
-        this.timesWidth = 35;
+        this.timesWidth = 45;
         this.mouseMode = 0; //0 = not pressed, 1 = pressed but nothing yet, 2 = redify, 3 = greenify, 4 = dragging the time selector
         this.lastMouse = {x: 0, y: 100};
         this.curMouse = {x: 0, y: 100};
@@ -260,15 +261,22 @@ class TimeSelector_Canvas extends Component {
         this.curMouse = null;
         this.mouseMode = 0;
     }
+    disableMobileDrag = (e) => {
+        if(e.target.nodeName !== "INPUT"){
+            e.preventDefault();
+        }
+    }
     componentDidMount = () => {
         this.canvas = this.canvasRef.current;
         this.ctx = this.canvas.getContext("2d");
+        this.ctx.font = "14px Poppins"
         this.ctx.textAlign = "center";
         this.canvas.addEventListener('wheel', this.handleScroll);
         this.canvas.addEventListener('mousedown', this.handleMouseDown);
         this.canvas.addEventListener('mouseup', this.handleMouseUp);
         this.canvas.addEventListener('mousemove', this.handleMouseMove);
         this.canvas.addEventListener('mouseout', this.handleMouseOut);
+        this.canvas.addEventListener('touchstart', this.disableMobileDrag);
         this.autoScrollInterval = setInterval(this.autoScroll, 20);
         this.drawAll();
         

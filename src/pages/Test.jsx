@@ -5,7 +5,7 @@ import TimeSelector from '../components/TimeSelector';
 import TimeSelector_Canvas from '../components/TimeSelector_Canvas';
 import './createEvent.css';
 
-class CreateEvent extends Component {
+class Test extends Component {
     render() { 
         return (
             <div>
@@ -32,4 +32,4 @@ class CreateEvent extends Component {
     }
 }
  
-export default CreateEvent;
+export default Test;
