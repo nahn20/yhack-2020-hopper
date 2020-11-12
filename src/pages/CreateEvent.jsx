@@ -24,12 +24,9 @@ class CreateEvent extends Component {
                     </tbody>
 
                 </table> */}
-                Cell Height: 10
-                <TimeSelector_Canvas cellsAcross={7} cellWidth={20} cellHeight={10}/>
-                Cell Height: 20
-                <TimeSelector_Canvas cellsAcross={7} cellWidth={20} cellHeight={20}/>
-                Cell Height: 40
-                <TimeSelector_Canvas cellsAcross={7} cellWidth={20} cellHeight={40}/>
+                <TimeSelector_Canvas cellsAcross={7} cellWidth={20} cellHeight={30} height={800}/>
+                <TimeSelector_Canvas cellsAcross={7} cellWidth={20} cellHeight={30}/>
+                
             </div>
         );
     }
