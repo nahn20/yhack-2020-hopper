@@ -11,7 +11,7 @@ class App extends Component {
       <BrowserRouter>
 
           <Switch>
-          <Route path="/" component={Test} exact/>
+          <Route path="/" component={CreateEvent} exact/>
             <Route path="/createevent" component={CreateEvent} exact/>
             <Route path="/signin" component={SignIn} exact/>
             <Route>Page not found</Route>

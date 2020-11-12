@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import combine_dicts from '../helper';
+import { combine_dicts } from '../helper';
 
 class Cell_Drag extends Component {
     constructor(props){

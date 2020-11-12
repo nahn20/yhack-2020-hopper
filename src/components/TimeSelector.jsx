@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import combine_dicts from '../helper';
+import { combine_dicts } from '../helper';
 
 const WEEKDAY_NAME_LOOKUP = [
     ["Sun", "Sunday"],

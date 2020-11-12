@@ -14,26 +14,42 @@ class TimeSelector_Canvas extends Component {
     constructor(props){
         super(props);
         this.canvasRef = React.createRef();
-        this.headers = this.props.headers ? this.props.headers : COLUMN_HEADERS;
-        this.cellWidth = this.props.cellWidth ? this.props.cellWidth : 40;
-        this.cellHeight = this.props.cellHeight ? this.props.cellHeight : 10;
+        this.cellWidth = this.props.cellWidth;
+        this.cellHeight = this.props.cellHeight;
         this.y = 0;
-        this.cellsAcross = this.props.cellsAcross ? this.props.cellsAcross : 1;
+        this.cellsAcross = this.props.cellsAcross;
         this.timesWidth = 50;
         this.mouseMode = 0; //0 = not pressed, 1 = pressed but nothing yet, 2 = redify, 3 = greenify, 4 = dragging the time selector
         this.lastMouse = {x: 0, y: 100};
         this.curMouse = {x: 0, y: 100};
-        if(this.props.data){
-            this.data = this.props.data;
-        }
-        else{
-            this.data = [];
-            for(let i = 0; i < this.cellsAcross; i++){
-                this.data.push(this.getFormattedDataColumn(this.props.start ? this.props.start : 6, this.props.end ? this.props.end : 21, i))
+        this.headers = [];
+        this.data = [];
+        let headerSelection = this.props.data.length > 7 ? 2 : 1
+        for(let day = 0; day < this.cellsAcross; day++){
+            this.headers.push(this.props.data[day+this.props.startDay].header[headerSelection])
+            this.data[day] = [];
+            for(let i = 0; i < this.props.data[day+this.props.startDay].data.length; i++){
+                let color = null;
+                switch(this.props.data[day+this.props.startDay].data[i]){
+                    case 0:
+                        color = COLORS["unavailable"];
+                        break;
+                    case 1:
+                        color = COLORS["no"];
+                        break;
+                    case 2:
+                        color = COLORS["yes"];
+                        break;
+                }
+                this.data[day][i] = {
+                    x: this.timesWidth+day*this.cellWidth,
+                    y: i*this.cellHeight,
+                    color: color,
+                }
             }
         }
         loop1:
-        for(let i = 0; i < this.data[0].length; i++){
+        for(let i = 0; i < this.data[0].length; i++){ //Chooses the lowest available slot and sets the y to be just higher than it
             for(let j = 0; j < this.data.length; j++){
                 if(this.data[j][i].color != COLORS["unavailable"]){
                     this.y = this.data[j][i].y - 10;
@@ -48,6 +64,9 @@ class TimeSelector_Canvas extends Component {
             let column = [];
             for(let i = 0; i < this.data[day].length; i++){
                 if(this.data[day][i].color === COLORS["yes"]){
+                    column.push(2);
+                }
+                else if(this.data[day][i].color === COLORS["no"]){
                     column.push(1);
                 }
                 else{
@@ -305,5 +324,11 @@ class TimeSelector_Canvas extends Component {
         );
     }
 }
- 
+TimeSelector_Canvas.defaultProps = {
+    cellsAcross: 7,
+    cellWidth: 40, 
+    cellHeight: 30,
+    height: 800,
+    startDay: 0, //Determines which day in the time slot it starts from
+}
 export default TimeSelector_Canvas;

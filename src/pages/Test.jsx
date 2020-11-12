@@ -7,7 +7,7 @@ import TimeSelector_Canvas from '../components/TimeSelector_Canvas';
 import './createEvent.css';
 import '../components/collapse.css';
 import '../components/fadeInUp.css';
-import nextId from 'react-id-generator'
+import nextId from 'react-id-generator';
 
 class Test extends Component {
     constructor(props){
@@ -47,9 +47,6 @@ class Test extends Component {
             <React.Fragment>
                 <div>
                     {this.state.timeSelector}
-                    {/* {this.state.timeSelector.map((ele, index) => <div className="animated animatedFadeUp fadeInUp" key={index}>
-                        {ele}
-                    </div>)} */}
                 </div>
                 <button onClick={this.switchCollapse}>
                     Toggle

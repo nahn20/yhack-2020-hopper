@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import combine_dicts from '../helper';
+import { combine_dicts } from '../helper';
 
 const MONTH_NAME_LOOKUP = [
     ["Jan", "January"],
