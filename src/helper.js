@@ -1,4 +1,8 @@
 const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+export const THEME = ["orange", "white", "grey"];
+
+
 export function combine_dicts(dict1, dict2){ //Dict2 adds any of its values to dict1 possibly overwriting
     let newDict = {};
     newDict = Object.assign(newDict, dict1);
@@ -15,6 +19,13 @@ export function getFullString(n, char){
     }
     return s;
 }
+export function getFullList(n, char){
+    let list = [];
+    for(let i = 0; i < n; i++){
+        list.push(char);
+    }
+    return list;
+}
 
 export function doubleDigitify(digit){
     if(digit < 10 && digit >= 0){
@@ -29,11 +40,14 @@ function getHeader(fullDate){
     let header = [`${day}, ${month}/${date}`, `${day}`, `${month}/${date}`];
     return header;
 }
+export function getDataDict(date){
+    return {header: getHeader(date), highlighted: false, data: []};
+}
 export function parseTimeString(s, fullDate){
     let hour = fullDate.getHours();
     let minute = fullDate.getMinutes();
     let initialSlot = 4*hour + Math.floor(minute/15);
-    let dataArray = [{header: getHeader(fullDate), highlighted: false, data: []}];
+    let dataArray = [getDataDict(fullDate)];
     for(let i = 0; i < initialSlot; i++){ //Filling in before
         dataArray[0].data[i] = 0;
     }
@@ -42,7 +56,7 @@ export function parseTimeString(s, fullDate){
         let slot = (i+initialSlot) % 96;
         if(slot === 0 && i > 0){
             fullDate.setDate(fullDate.getDate()+1);
-            dataArray[day] = {header: getHeader(fullDate), highlighted: false, data: []};
+            dataArray[day] = getDataDict(fullDate);
         }
         dataArray[day].data[slot] = parseInt(s.charAt(i));
     }
