@@ -19,7 +19,7 @@ class TimeSelector_Canvas extends Component {
         this.y = 0;
         this.cellsAcross = this.props.cellsAcross ? this.props.cellsAcross : 1;
         this.timesWidth = 35;
-        this.mouseMode = 0; //0 = not pressed, 1 = pressed but nothing yet, 2 = redify, 3 = greenify
+        this.mouseMode = 0; //0 = not pressed, 1 = pressed but nothing yet, 2 = redify, 3 = greenify, 4 = dragging the time selector
         this.lastMouse = {x: 0, y: 100};
         this.curMouse = {x: 0, y: 100};
         if(this.props.data){
@@ -63,6 +63,9 @@ class TimeSelector_Canvas extends Component {
             if(this.data[0][i].y >= this.y-1 && this.data[0][i].y < this.y+this.canvas.height){
                 if(i % 4 === 0){
                     let text = Math.floor(i/4);
+                    if(text < 10){
+                        text = "0" + text;
+                    }
                     text += ":00";
                     
                     this.ctx.fillText(text, this.timesWidth/2-2.5, this.data[0][i].y-this.y);
@@ -129,7 +132,7 @@ class TimeSelector_Canvas extends Component {
         for(let day = 0; day < this.data.length; day++){
             for(let i = 0; i < this.data[day].length; i++){
                 let cell = this.data[day][i];
-                if(this.mouseMode >= 1){
+                if(this.mouseMode >= 1 && this.mouseMode <= 3){
                     if(this.lineSegRectIntersection([this.lastMouse, this.curMouse], cell.x, cell.y-this.y, this.cellWidth, this.cellHeight)){
                         if(cell.color !== COLORS["unavailable"]){
                             if(this.mouseMode === 1){
@@ -216,17 +219,21 @@ class TimeSelector_Canvas extends Component {
     }
     autoScroll = () => {
         const SCROLL_SPEED = 5;
-        if(this.curMouse.y < AUTOSCROLL_MARGIN + HEADER_HEIGHT){
-            this.doScroll(-SCROLL_SPEED);
-        }
-        if(this.curMouse.y > this.canvas.height - AUTOSCROLL_MARGIN){
-            this.doScroll(SCROLL_SPEED);
+        if(this.curMouse && this.mouseMode !== 4){
+            if(this.curMouse.y < AUTOSCROLL_MARGIN + HEADER_HEIGHT){
+                this.doScroll(-SCROLL_SPEED);
+            }
+            if(this.curMouse.y > this.canvas.height - AUTOSCROLL_MARGIN){
+                this.doScroll(SCROLL_SPEED);
+            }
         }
     }
     handleMouseDown = (e) => {
         this.mouseMode = 1;
+        if(this.curMouse.x < this.timesWidth){
+            this.mouseMode = 4;
+        }
         this.handleMouseMove(e);
-        this.ctx.fillStyle = "black"
     }
     handleMouseUp = (e) => {
         this.mouseMode = 0;
@@ -243,7 +250,15 @@ class TimeSelector_Canvas extends Component {
             this.lastMouse = mouse;
         }
         this.curMouse = mouse;
+        if(this.mouseMode === 4){
+            this.y += this.curMouse.y-this.lastMouse.y;
+        }
         this.mouseDraw();
+    }
+    handleMouseOut = (e) => {
+        this.lastMouse = null;
+        this.curMouse = null;
+        this.mouseMode = 0;
     }
     componentDidMount = () => {
         this.canvas = this.canvasRef.current;
@@ -253,13 +268,14 @@ class TimeSelector_Canvas extends Component {
         this.canvas.addEventListener('mousedown', this.handleMouseDown);
         this.canvas.addEventListener('mouseup', this.handleMouseUp);
         this.canvas.addEventListener('mousemove', this.handleMouseMove);
+        this.canvas.addEventListener('mouseout', this.handleMouseOut);
         this.autoScrollInterval = setInterval(this.autoScroll, 20);
         this.drawAll();
         
     }
     render() { 
         return (
-                <canvas width={this.timesWidth+this.cellWidth*this.cellsAcross} height={300} ref={this.canvasRef} style={{cursor: "crosshair", borderStyle: "solid", backgroundColor: "aliceblue"}}/>
+                <canvas width={this.timesWidth+this.cellWidth*this.cellsAcross} height={this.props.height ? this.props.height : 300} ref={this.canvasRef} style={{cursor: "crosshair", borderStyle: "solid", backgroundColor: "aliceblue"}}/>
 
             
         );
