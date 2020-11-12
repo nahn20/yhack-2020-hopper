@@ -19,7 +19,7 @@ class TimeSelector_Canvas extends Component {
         this.cellHeight = this.props.cellHeight ? this.props.cellHeight : 10;
         this.y = 0;
         this.cellsAcross = this.props.cellsAcross ? this.props.cellsAcross : 1;
-        this.timesWidth = 45;
+        this.timesWidth = 50;
         this.mouseMode = 0; //0 = not pressed, 1 = pressed but nothing yet, 2 = redify, 3 = greenify, 4 = dragging the time selector
         this.lastMouse = {x: 0, y: 100};
         this.curMouse = {x: 0, y: 100};
@@ -41,6 +41,22 @@ class TimeSelector_Canvas extends Component {
                 }
             }
         }
+    }
+    formatData = () => {
+        let data = [];
+        for(let day = 0; day < this.data.length; day++){
+            let column = [];
+            for(let i = 0; i < this.data[day].length; i++){
+                if(this.data[day][i].color === COLORS["yes"]){
+                    column.push(1);
+                }
+                else{
+                    column.push(0);
+                }
+            }
+            data[day] = column;
+        }
+        return data;
     }
     clearCanvas = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

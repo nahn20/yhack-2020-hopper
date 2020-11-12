@@ -6,6 +6,14 @@ import TimeSelector_Canvas from '../components/TimeSelector_Canvas';
 import './createEvent.css';
 
 class Test extends Component {
+    constructor(props){
+        super(props);
+        this.timeSelectRefs = [React.createRef()];
+    }
+    submitResults = () => {
+        let data = this.timeSelectRefs[0].current.formatData();
+        console.log(JSON.stringify(data));
+    }
     render() { 
         return (
             <div>
@@ -24,9 +32,10 @@ class Test extends Component {
                     </tbody>
 
                 </table> */}
-                <TimeSelector_Canvas cellsAcross={7} cellWidth={40} cellHeight={30} height={800}/>
-                <TimeSelector_Canvas cellsAcross={7} cellWidth={40} cellHeight={30}/>
-                
+                <TimeSelector_Canvas ref={this.timeSelectRefs[0]} cellsAcross={7} cellWidth={40} cellHeight={30} height={800}/>
+                <button onClick={this.submitResults}>
+                    Submit
+                </button>
             </div>
         );
     }
