@@ -50,6 +50,23 @@ class App extends Component {
 
 // BEGIN functions
 
+/* Map of each event:
+Event
+|-->event-name
+|-->time
+|-->id
+|-->template
+|-->schedules
+----|-->user1
+----|---|-->name
+----|---|-->schedule
+----|-->user2
+----|---|-->name
+----|---|-->schedule
+----|-->user3
+----|---|-->name
+----|---|-->schedule
+*/
 // END FUNCTIONS
 
 export default App;
