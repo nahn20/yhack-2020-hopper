@@ -36,6 +36,22 @@ class App extends Component {
   render(){
     return (
       <BrowserRouter>
+        {CreateOrUpdateEvent({event_name: "Hello", time: "time", eventID: "event2", template: [1,0,0,1], time_heat_map: [1,1,1,1]})}
+        {CreateOrUpdateEvent({event_name: "Hello", time: "time", eventID: "event3", template: [1,0,0,1], time_heat_map: [1,0,0,1]})}
+        {CreateOrUpdateEvent({event_name: "Hello", time: "time", eventID: "event4", template: [1,0,0,1], time_heat_map: [0,0,0,1]})}
+        {CreateOrUpdateUserInEvent("event2", "schedule1", "a", [1,1,0,1])}
+        {CreateOrUpdateUserInEvent("event2", "schedule2", "b", [1,0,0,1])}
+        {CreateOrUpdateUserInEvent("event2", "schedule3", "c", [1,1,1,1])}
+        {CreateOrUpdateUserInEvent("event3", "schedule1", "a", [1,0,0,1])}
+        {CreateOrUpdateUserInEvent("event3", "schedule2", "b", [0,0,0,1])}
+        {CreateOrUpdateUserInEvent("event3", "schedule3", "c", [1,0,0,0])}
+        {CreateOrUpdateUserInEvent("event4", "schedule1", "a", [0,0,0,1])}
+        {CreateOrUpdateUserInEvent("event4", "schedule2", "b", [0,0,0,1])}
+        {CreateOrUpdateUserInEvent("event4", "schedule3", "c", [0,0,0,1])}
+        {GetEvent("event2")}
+        {GetEvent("event2")}
+        {GetEvent("event2")}
+        {UpdateBestTime("event2")}
 
           <Switch>
           <Route path="/" component={UserEvent} exact/>
