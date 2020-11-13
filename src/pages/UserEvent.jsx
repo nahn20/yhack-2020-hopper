@@ -89,6 +89,7 @@ class UserEvent extends Component {
         }
         else{
             CreateOrUpdateUserInEvent(this.query.id, name, name, data)
+            // TODO: run the following line after the above line
             // this.openResults();
         }
     }
