@@ -1,6 +1,6 @@
 const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-export const THEME = ["orange", "white", "grey"];
+export const THEME = ["#94c2d3", "white", "rgb(67, 137, 163)", "#baddadff", "#ff7c75ec", "rgb(200, 200, 200)"];
 
 
 export function combine_dicts(dict1, dict2){ //Dict2 adds any of its values to dict1 possibly overwriting

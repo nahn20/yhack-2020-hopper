@@ -86,7 +86,7 @@ class Calendar extends Component {
     render() {
         let weekdays = [];
         for(let i = 0; i < WEEKDAY_NAME_LOOKUP.length; i++){
-            weekdays.push(<td key={i} style={combine_dicts(tableStyle, {width: this.width/7, backgroundColor: THEME[0], color: THEME[1], textAlign: "center"})}>{WEEKDAY_NAME_LOOKUP[i][0]}</td>)
+            weekdays.push(<td key={i} style={combine_dicts(tableStyle, {width: this.width/7, backgroundColor: THEME[0], color: THEME[1], textAlign: "center", lineHeight: "2em"})}>{WEEKDAY_NAME_LOOKUP[i][0]}</td>)
         }
         let dates = [[], [], [], [], []];
         this.dateRefs = [];
@@ -134,8 +134,9 @@ class Calendar extends Component {
                     msUserSelect: "none",
                     userSelect: "none",
                     fontFamily: "Poppins",
+                    display: "inline-block",
                     transition: `opacity ${OPACITY_TIMING_MS}ms ease`,
-                    opacity: this.state.opacity
+                    opacity: this.state.opacity,
 
                 }}>
                     <div style={{

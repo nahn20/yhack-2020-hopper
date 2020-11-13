@@ -6,11 +6,16 @@ import './createEvent.css';
 import '../components/collapse.css';
 import '../components/fadeInUp.css';
 import nextId from 'react-id-generator';
-import { getFullString, parseTimeString, getDataDict, getFullList, smushData, chopDataEnd, chopDataStart } from '../helper';
+import { getFullString, parseTimeString, getDataDict, getFullList, smushData, chopDataEnd, chopDataStart, THEME } from '../helper';
 import Cell_OpenTimeSlot from '../components/Cell_OpenTimeSlot';
 import Calendar from '../components/Calendar';
 import { CreateOrUpdateEvent } from '../firebase';
+import { Container, Row, Col } from 'react-bootstrap';
+import NavBar from '../components/NavBar';
+import { Button } from '@material-ui/core'
+const randomstring = require("randomstring");
 
+const OPACITY_TIMING_MS = 250;
 const MAX_ROW_LENGTH = 7;
 class CreateEvent extends Component {
     constructor(props){
@@ -21,20 +26,24 @@ class CreateEvent extends Component {
         this.data = parseTimeString(getFullString(13*96, "1"), new Date(this.startDate.getTime()));
         this.timeSelectRef = React.createRef();
         this.collapseRef = React.createRef();
+        this.inputBox = React.createRef();
         this.state = {
             timeSelector: [
                 <Collapse ref={this.collapseRef} isOpened={true} key={nextId()}>
                     <div className="animated animatedFadeUp fadeInUp">
-                        <TimeSelector_Canvas ref={this.timeSelectRef} data={this.data} startDay={this.startIndex}/>
+                        <TimeSelector_Canvas ref={this.timeSelectRef} data={this.data} cellWidth={60} startDay={this.startIndex}/>
                     </div>
                 </Collapse>],
+            error: "",
         }
     }
     updateData = (ref) => {
         let data = ref.current.formatData();
         let startDay = ref.current.props.startDay;
         for(let day = 0; day < data.length; day++){
-            this.data[day+startDay].data = data[day];
+            if(this.data[day+startDay]){
+                this.data[day+startDay].data = data[day];
+            }
         }
     }
     switchCollapse = () => {
@@ -44,7 +53,7 @@ class CreateEvent extends Component {
         state.timeSelector = [
             <Collapse ref={newRef} isOpened={false} autoToggle={true} key={nextId()}>
                 <div className="animatedFast animatedFadeUp fadeInUp">
-                    <TimeSelector_Canvas ref={this.timeSelectRef} data={this.data} startDay={this.startIndex}/>
+                    <TimeSelector_Canvas ref={this.timeSelectRef} data={this.data} cellWidth={60} startDay={this.startIndex}/>
                 </div>
             </Collapse>,
             state.timeSelector[0]
@@ -72,7 +81,6 @@ class CreateEvent extends Component {
             }
         }
         let newDifference = (calendarDate.getTime() - this.startDate.getTime()) / 86400000;
-        console.log(newDifference);
         this.startIndex = newDifference;
         this.switchCollapse();
     }
@@ -82,25 +90,86 @@ class CreateEvent extends Component {
         let shift = chopDataStart(this.data);
         this.startDate = new Date(this.startDate.getTime() + (shift * 86400000));
         let data = smushData(this.data);
+        var found1 = false;
         for(let i = 0; i < data.length; i++){
-            this.data[i]--;
+            data[i]--;
+            if(data[i] === 1){
+                found1 = true
+            }
         }
-        CreateOrUpdateEvent({event_name: "Hello", time: this.startDate.toString(), eventID: "event2", template: data, time_heat_map: data});
+        let name = this.inputBox.current.value;
+        if(!found1){
+            let state = this.state;
+            state.error = "Don't forget to fill in some time slots!"
+            this.setState(state);
+        }
+        else if(name === ""){
+            let state = this.state;
+            state.error = "Don't forget an event name!"
+            this.setState(state);
+        }
+        else{
+            let id = randomstring.generate();
+            CreateOrUpdateEvent({event_name: name, time: this.startDate.toString(), eventID: id, template: data, time_heat_map: data});
+            setTimeout(function(){
+                window.location.href = `/event?id=${id}`
+            }, 200);
+            
+            // window.open(`/event?id=${id}`);
+        }
+
+
     }
     componentDidMount = () => {
     }
     render() {
         return (
             <React.Fragment>
-                <div style={{float: "left", margin: "20px"}}>
-                    <Calendar handleCalendarSelect={this.handleCalendarSelect} month={this.startDate.getMonth()} year={this.startDate.getFullYear()}/>
+                <NavBar/>
+                <div className="animated animatedFadeInUp fadeInUp" style={{
+                    textAlign: "center", 
+                    fontFamily: "Poppins",
+                }}>
+                    <Container fluid>
+                        <Row>
+                            <Col>
+                                <div style={{width: "100%", alignContent: "center", marginTop: "10vh"}}>
+                                    <div style={{fontWeight: "normal", fontSize: "1.8em", lineHeight: "3em"}}>
+                                        Available Dates
+                                    </div>
+                                    <Calendar handleCalendarSelect={this.handleCalendarSelect} month={this.startDate.getMonth()} year={this.startDate.getFullYear()}/>
+                                </div>
+                                
+                            </Col>
+                            <Col>
+                                <div style={{display: "inline-block", marginTop: "30vh"}}>
+                                    <input ref={this.inputBox} className="align-top" placeholder="Enter Event Name" style={{
+                                        borderRadius: "4px",
+                                        padding: "8px",
+                                        borderColor: THEME[5],
+                                        fontSize: "1.2em"
+                                    }}/>
+                                    <br/>
+                                    <Button variant="contained" size="large" disableEvalation onClick={this.submit} style={{backgroundColor: THEME[2], color: THEME[1], outline: "none", marginTop: "10vh", fontSize: "1.2em"}}>
+                                        SUBMIT
+                                    </Button>
+                                    <div style={{marginTop: "5vh"}}>
+                                        {this.state.error}
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col>
+                                <div style={{display: "inline-block"}}>
+                                    <div style={{fontWeight: "normal", fontSize: "1.8em", lineHeight: "3em"}}>
+                                        Available Times
+                                    </div>
+                                    {this.state.timeSelector}
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
                 </div>
-                <div style={{float: "right", margin: "20px"}}>
-                    {this.state.timeSelector}
-                </div>
-                <button onClick={this.submit}>
-                    Submit
-                </button>
+
             </React.Fragment>
 
         );

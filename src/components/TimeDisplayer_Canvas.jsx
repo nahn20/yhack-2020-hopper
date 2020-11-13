@@ -11,7 +11,7 @@ const COLORS = {
     "unavailable": THEME[1]
 }
 const COLUMN_HEADERS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-class TimeSelector_Canvas extends Component {
+class TimeDisplayer_Canvas extends Component {
     constructor(props){
         super(props);
         this.canvasRef = React.createRef();
@@ -29,22 +29,23 @@ class TimeSelector_Canvas extends Component {
         if(this.cellWidth > 80){
             headerSelection = 0;
         }
+        let highestVal = 0;
+        for(let day = 0; day < this.cellsAcross; day++){
+            for(let i = 0; i < this.props.data[day+this.props.startDay].data.length; i++){
+                let val = this.props.data[day+this.props.startDay].data[i];
+                if(val > highestVal){
+                    highestVal = val;
+                }
+            }
+        }
         for(let day = 0; day < this.cellsAcross; day++){
             this.headers.push(this.props.data[day+this.props.startDay].header[headerSelection])
             this.data[day] = [];
             for(let i = 0; i < this.props.data[day+this.props.startDay].data.length; i++){
                 let color = null;
-                switch(this.props.data[day+this.props.startDay].data[i]){
-                    case 0:
-                        color = COLORS["unavailable"];
-                        break;
-                    case 1:
-                        color = COLORS["no"];
-                        break;
-                    case 2:
-                        color = COLORS["yes"];
-                        break;
-                }
+                let val = this.props.data[day+this.props.startDay].data[i];
+                let ratio = val/highestVal;
+                color = `hsl(120, ${20+60*ratio}%, ${100-60*ratio}%)`
                 this.data[day][i] = {
                     x: this.timesWidth+day*this.cellWidth,
                     y: i*this.cellHeight,
@@ -322,17 +323,17 @@ class TimeSelector_Canvas extends Component {
     }
     render() { 
         return (
-                <canvas width={this.timesWidth+this.cellWidth*this.cellsAcross} height={this.props.height ? this.props.height : 300} ref={this.canvasRef} style={{cursor: "crosshair", backgroundColor: COLORS[1]}}/>
+                <canvas width={this.timesWidth+this.cellWidth*this.cellsAcross} height={this.props.height ? this.props.height : 300} ref={this.canvasRef} style={{backgroundColor: COLORS[1]}}/>
 
             
         );
     }
 }
-TimeSelector_Canvas.defaultProps = {
+TimeDisplayer_Canvas.defaultProps = {
     cellsAcross: 7,
     cellWidth: 40, 
     cellHeight: 30,
     height: 800,
     startDay: 0, //Determines which day in the time slot it starts from
 }
-export default TimeSelector_Canvas;
+export default TimeDisplayer_Canvas;

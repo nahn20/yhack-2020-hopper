@@ -51,7 +51,7 @@ export async function GetEvent (eventID){
     // Reference to event
     let event = firestore.collection("events").doc(eventID);
     return event.get().then(function(doc){
-      //console.log(doc.data());
+      console.log(doc.data());
       return(doc.data());
     }).catch(function(error) {
       console.log("Error getting cached document:", error);
