@@ -67,6 +67,21 @@ Event
 ----|---|-->name
 ----|---|-->schedule
 */
+
+
+// Call this on any event with eventID
+// Returns a JSON object of form {event_name: "event_name", time: "time", eventID: "eventID", template: Array(), time_heat_map: Array()}
+function GetEvent (eventID){
+  // Reference to event
+  let event = firestore.collection("events").doc(eventID);
+  event.get().then(function(doc){
+    console.log(doc.data());
+    return(doc.data());
+  }).catch(function(error) {
+    console.log("Error getting cached document:", error);
+});
+}
+
 // END FUNCTIONS
 
 export default App;
