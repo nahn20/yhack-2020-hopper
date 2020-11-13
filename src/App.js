@@ -120,6 +120,43 @@ function CreateOrUpdateUserInEvent(eventID, userID, name, schedule){
   });
 }
 
+// Call this on any event with eventID and it will tally up all the schedules and save it to time_heat_map of event
+function UpdateBestTime (eventID){
+  // Reference to event
+  let event = firestore.collection("events").doc(eventID);
+  // Fetch schedules of all users
+  let schedulesCollection = event.collection("schedules");
+  // Initialize a tallied schedules counter. This pairwise sums all schedules to create a heatmap of best times. It starts out as the template since the admin is the first tallied user
+
+  event.get().then(function(doc){
+    let talliedSchedules = doc.data()["template"]
+    console.log(talliedSchedules); 
+
+    schedulesCollection.get().then((querySnapshot) => {
+      querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          let userSnapShot = doc.data()
+          let userSchedule = userSnapShot["schedule"]
+          // pairwise userSchedule to the talliedSchedules
+          talliedSchedules = talliedSchedules.map((i,j) => i + userSchedule[j]);
+
+        event.update({
+          time_heat_map: talliedSchedules
+        })
+        .then(function() {
+          console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        });
+      });
+    });
+  }).catch(function(error) {
+    console.log("Error getting cached document:", error);
+});
+
+
+}
 // END FUNCTIONS
 
 export default App;
