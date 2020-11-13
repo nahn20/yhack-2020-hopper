@@ -29,7 +29,7 @@ class UserEvent extends Component {
             error: "",
             adminMessage: this.query.admin ? 
                 <div>
-                    Share your calendar with friends! <a style={{color: "blue", cursor: "grab"}}onClick={() => this.copyLink(`${window.location.host}/event?id=${this.query.id}`)}>Copy link to clipboard</a>
+                    Share your calendar with friends! <br/><a style={{color: "#0000EE", cursor: "grab", textDecoration: "underline"}} onClick={() => this.copyLink(`${window.location.host}/event?id=${this.query.id}`)}>Copy link to clipboard</a>
                 </div>
                  : <div></div>
         }
@@ -56,11 +56,10 @@ class UserEvent extends Component {
         }
         let state = this.state;
         state.data = parseTimeList(getEvent.template, new Date(getEvent.time));
-        state.eventName = getEvent.name;
+        state.eventName = getEvent.event_name;
         this.setState(state);
     }
     updateData = (ref) => {
-        let state = this.state;
         let data = ref.current.formatData();
         let startDay = ref.current.props.startDay;
         for(let day = 0; day < data.length; day++){
@@ -115,10 +114,13 @@ class UserEvent extends Component {
                 <Container fluid>
                     <Row>
                         <Col xl={2}>
-                            <div style={{marginTop: "10vh"}}>
+                            <div style={{marginTop: "5vh", fontWeight: "bold", fontSize: "1.5em"}}>
+                                {this.state.eventName}
+                            </div>
+                            <div style={{marginTop: "5vh"}}>
                                 {this.state.adminMessage}
                             </div>
-                            <div style={{display: "inline-block", marginTop: "10vh", width: "100%"}}>
+                            <div style={{display: "inline-block", marginTop: "5vh", width: "100%"}}>
                                 <input ref={this.inputBox} className="align-top" placeholder="Enter Name" style={{
                                     borderRadius: "4px",
                                     padding: "8px",

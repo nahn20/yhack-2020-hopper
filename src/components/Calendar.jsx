@@ -88,7 +88,7 @@ class Calendar extends Component {
         for(let i = 0; i < WEEKDAY_NAME_LOOKUP.length; i++){
             weekdays.push(<td key={i} style={combine_dicts(tableStyle, {width: this.width/7, backgroundColor: THEME[0], color: THEME[1], textAlign: "center", lineHeight: "2em"})}>{WEEKDAY_NAME_LOOKUP[i][0]}</td>)
         }
-        let dates = [[], [], [], [], []];
+        let dates = [[], [], [], [], [], []];
         this.dateRefs = [];
         for(let i = 0; i < this.state.numDays+this.state.firstDay; i++){
             let date = 1+i-this.state.firstDay;
