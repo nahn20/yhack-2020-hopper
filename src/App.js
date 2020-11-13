@@ -48,4 +48,8 @@ class App extends Component {
   }
 }
 
+// BEGIN functions
+
+// END FUNCTIONS
+
 export default App;
