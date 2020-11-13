@@ -30,7 +30,10 @@ class TimeSelector_Canvas extends Component {
             headerSelection = 0;
         }
         for(let day = 0; day < this.cellsAcross; day++){
-            this.headers.push(this.props.data[day+this.props.startDay].header[headerSelection])
+            var x = this.props.data[day+this.props.startDay].header[headerSelection];
+            var y = x.substring(x, x.indexOf("/")-2)+(parseInt(x.substring(x.indexOf("/")-2, x.indexOf("/")))+1) + "/"+x.substring(x.indexOf("/")+1);
+            this.headers.push(y)
+            console.log(x, y)
             this.data[day] = [];
             for(let i = 0; i < this.props.data[day+this.props.startDay].data.length; i++){
                 let color = null;
