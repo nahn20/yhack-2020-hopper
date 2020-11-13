@@ -112,7 +112,7 @@ class CreateEvent extends Component {
             let id = randomstring.generate();
             CreateOrUpdateEvent({event_name: name, time: this.startDate.toString(), eventID: id, template: data, time_heat_map: data});
             setTimeout(function(){
-                window.location.href = `/event?id=${id}`
+                window.location.href = `/event?id=${id}&admin=true`
             }, 200);
             
             // window.open(`/event?id=${id}`);

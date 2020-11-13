@@ -21,6 +21,7 @@ class EventResults extends Component {
         this.collapseRef = React.createRef();
         this.state = {
             data: parseTimeString(getFullString(0*96, "1"), this.startDate),
+            eventName: null,
         }
     }
     getEventData = async() => {
@@ -34,6 +35,7 @@ class EventResults extends Component {
         }
         let state = this.state;
         state.data = parseTimeList(getEvent.time_heat_map, new Date(getEvent.time));
+        state.eventName = getEvent.event_name;
         this.setState(state);
     }
     updateData = (ref) => {
@@ -57,6 +59,9 @@ class EventResults extends Component {
                     width: "100vw",
                     marginTop: "2vh",
                 }}>
+                    <div style={{fontWeight: "bold", fontSize: "1.5em", marginBottom: "10px"}}>
+                        {this.state.eventName}
+                    </div>
                     <Collapse ref={this.collapseRef} isOpened={true} key={nextId()}>
                         <div className="animated animatedFadeUp fadeInUp">
                             <TimeDisplayer_Canvas ref={this.timeSelectRef} data={this.state.data} cellsAcross={this.state.data.length} cellWidth={(document.documentElement.clientWidth*(9/12))/this.state.data.length}/>
