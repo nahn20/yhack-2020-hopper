@@ -51,10 +51,13 @@ export async function GetEvent (eventID){
     // Reference to event
     let event = firestore.collection("events").doc(eventID);
     return event.get().then(function(doc){
-      console.log(doc.data());
+      console.log("Got event data: ", doc.data());
       return(doc.data());
     }).catch(function(error) {
-      console.log("Error getting cached document:", error);
+      consoany event with eventID and it will tally up all the schedules and save it to time_heat_map of event
+  function UpdateBestTime (eventID){
+    console.log("UpdateBestTime Called")
+    // Reference tle.log("Error getting cached document:", error);
   });
   }
   // The reverse of GetEvent(eventID)
@@ -93,18 +96,14 @@ export async function GetEvent (eventID){
       console.error("Error writing document: ", error);
     });
   }
-  // Call this on any event with eventID and it will tally up all the schedules and save it to time_heat_map of event
-  function UpdateBestTime (eventID){
-    // Reference to event
+  // Call this on o event
     let event = firestore.collection("events").doc(eventID);
     // Fetch schedules of all users
     let schedulesCollection = event.collection("schedules");
     // Initialize a tallied schedules counter. This pairwise sums all schedules to create a heatmap of best times. It starts out as the template since the admin is the first tallied user
-  
     event.get().then(function(doc){
       let talliedSchedules = doc.data()["template"]
-      console.log(talliedSchedules); 
-  
+      console.log(talliedSchedules);
       schedulesCollection.get().then((querySnapshot) => {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
