@@ -6,9 +6,10 @@ import './createEvent.css';
 import '../components/collapse.css';
 import '../components/fadeInUp.css';
 import nextId from 'react-id-generator';
-import { getFullString, parseTimeString, getDataDict, getFullList } from '../helper';
+import { getFullString, parseTimeString, getDataDict, getFullList, smushData, chopDataEnd, chopDataStart } from '../helper';
 import Cell_OpenTimeSlot from '../components/Cell_OpenTimeSlot';
 import Calendar from '../components/Calendar';
+import { CreateOrUpdateEvent } from '../firebase';
 
 const MAX_ROW_LENGTH = 7;
 class CreateEvent extends Component {
@@ -75,6 +76,17 @@ class CreateEvent extends Component {
         this.startIndex = newDifference;
         this.switchCollapse();
     }
+    submit = () => {
+        this.updateData(this.timeSelectRef);
+        chopDataEnd(this.data);
+        let shift = chopDataStart(this.data);
+        this.startDate = new Date(this.startDate.getTime() + (shift * 86400000));
+        let data = smushData(this.data);
+        for(let i = 0; i < data.length; i++){
+            this.data[i]--;
+        }
+        CreateOrUpdateEvent({event_name: "Hello", time: this.startDate.toString(), eventID: "event2", template: data, time_heat_map: data});
+    }
     componentDidMount = () => {
     }
     render() {
@@ -86,6 +98,9 @@ class CreateEvent extends Component {
                 <div style={{float: "right", margin: "20px"}}>
                     {this.state.timeSelector}
                 </div>
+                <button onClick={this.submit}>
+                    Submit
+                </button>
             </React.Fragment>
 
         );

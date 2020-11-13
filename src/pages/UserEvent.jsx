@@ -7,23 +7,27 @@ import './createEvent.css';
 import '../components/collapse.css';
 import '../components/fadeInUp.css';
 import nextId from 'react-id-generator';
-import { getFullString, parseTimeString } from '../helper';
+import { getFullString, parseTimeString, parseTimeList } from '../helper';
+import { GetEvent } from '../firebase';
+const queryString = require('query-string');
 
 class UserEvent extends Component {
     constructor(props){
         super(props);
-        this.startDate = new Date;
-        this.data = parseTimeString(getFullString(20*96, "1"), this.startDate);
+        this.startDate = new Date();
+        this.query = queryString.parse(this.props.location.search);
         this.timeSelectRef = React.createRef();
         this.collapseRef = React.createRef();
         this.state = {
-            timeSelector: [
-                <Collapse ref={this.collapseRef} isOpened={true} key={nextId()}>
-                    <div className="animated animatedFadeUp fadeInUp">
-                        <TimeSelector_Canvas ref={this.timeSelectRef} data={this.data} cellsAcross={this.data.length}/>
-                    </div>
-                </Collapse>],
+            data: parseTimeString(getFullString(20*96, "1"), this.startDate),
         }
+    }
+    getEventData = async() => {
+        let getEvent = await GetEvent(this.query.id);
+        console.log(getEvent)
+        let state = this.state;
+        state.data = parseTimeList(getEvent.template, new Date(getEvent.time));
+        this.setState(state);
     }
     updateData = (ref) => {
         let data = ref.current.formatData();
@@ -34,13 +38,16 @@ class UserEvent extends Component {
         console.log(this.data)
     }
     componentDidMount = () => {
+        this.getEventData();
     }
     render() {
         return (
             <React.Fragment>
-                <div>
-                    {this.state.timeSelector}
-                </div>
+                <Collapse ref={this.collapseRef} isOpened={true} key={nextId()}>
+                    <div className="animated animatedFadeUp fadeInUp">
+                        <TimeSelector_Canvas ref={this.timeSelectRef} data={this.state.data} cellsAcross={this.state.data.length}/>
+                    </div>
+                </Collapse>
                 <button onClick={() => this.updateData(this.timeSelectRef)}>
                     Submit
                 </button>
