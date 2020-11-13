@@ -88,8 +88,8 @@ class UserEvent extends Component {
             this.setState(state);
         }
         else{
-            CreateOrUpdateUserInEvent(this.query.id, name, name, data);
-            this.openResults();	
+            CreateOrUpdateUserInEvent(this.query.id, name, name, data)
+            // this.openResults();
         }
     }
     openResults = () => {
