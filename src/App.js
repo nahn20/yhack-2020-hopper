@@ -102,6 +102,24 @@ function CreateOrUpdateEvent(payload){
   });
 }
 
+// Call this on any user with userID in event with eventID
+// Creates or updates a user in event. Then sets name and schedule property of user to name and schedule
+function CreateOrUpdateUserInEvent(eventID, userID, name, schedule){
+  // Fetch schedules of all users
+  let eventParticipant = firestore.collection("events").doc(eventID).collection("schedules").doc(userID);
+  eventParticipant.set({
+    name: name,
+    schedule: schedule
+  })
+  .then(function() {
+    console.log("Document successfully written!");
+    UpdateBestTime(eventID);
+  })
+  .catch(function(error) {
+    console.error("Error writing document: ", error);
+  });
+}
+
 // END FUNCTIONS
 
 export default App;
