@@ -90,7 +90,6 @@ class UserEvent extends Component {
         }
         else{
             CreateOrUpdateUserInEvent(this.query.id, name, name, data);
-            this.openResults();
         }
     }
     openResults = () => {

@@ -54,10 +54,7 @@ export async function GetEvent (eventID){
       console.log("Got event data: ", doc.data());
       return(doc.data());
     }).catch(function(error) {
-      consoany event with eventID and it will tally up all the schedules and save it to time_heat_map of event
-  function UpdateBestTime (eventID){
-    console.log("UpdateBestTime Called")
-    // Reference tle.log("Error getting cached document:", error);
+      console.log("Error getting cached document:", error);
   });
   }
   // The reverse of GetEvent(eventID)
@@ -96,7 +93,10 @@ export async function GetEvent (eventID){
       console.error("Error writing document: ", error);
     });
   }
-  // Call this on o event
+  // Call this on any event with eventID and it will tally up all the schedules and save it to time_heat_map of event
+  function UpdateBestTime (eventID){
+    console.log("UpdateBestTime Called")
+    // Reference to event
     let event = firestore.collection("events").doc(eventID);
     // Fetch schedules of all users
     let schedulesCollection = event.collection("schedules");
