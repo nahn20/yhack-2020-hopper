@@ -115,16 +115,15 @@ export async function GetEvent (eventID){
             let userSchedule = userSnapShot["schedule"]
             // pairwise userSchedule to the talliedSchedules
             talliedSchedules = talliedSchedules.map((i,j) => i + userSchedule[j]);
-  
-          event.update({
-            time_heat_map: talliedSchedules
-          })
-          .then(function() {
-            console.log("Document successfully written!");
-          })
-          .catch(function(error) {
-            console.error("Error writing document: ", error);
-          });
+        });
+        event.update({
+          time_heat_map: talliedSchedules
+        })
+        .then(function(){
+          console.log("Heatmap successfully generated", talliedSchedules);
+        })
+        .catch(function(error) {
+          console.error("Error writing heatmap: ", error);
         });
       });
     }).catch(function(error) {
