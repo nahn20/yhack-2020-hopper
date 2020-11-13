@@ -82,6 +82,26 @@ function GetEvent (eventID){
 });
 }
 
+// The reverse of GetEvent(eventID)
+// Takes in payload of form {event_name: "event_name", time: "time", eventID: "eventID", template: Array(), time_heat_map: Array()}
+// Creates or updates an event. Then sets name, time, and template property of event to name, time, template
+function CreateOrUpdateEvent(payload){
+  firestore.collection("events").doc(payload.eventID).set({
+    event_name: payload.event_name,
+    time: payload.time,
+    eventID: payload.eventID,
+    template:payload.template,
+    time_heat_map: payload.template
+  })
+  .then(function() {
+    console.log("Document successfully written!");
+    UpdateBestTime(payload.eventID);
+  })
+  .catch(function(error) {
+    console.error("Error writing document: ", error);
+  });
+}
+
 // END FUNCTIONS
 
 export default App;
