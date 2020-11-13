@@ -57,7 +57,6 @@ export async function GetEvent (eventID){
       console.log("Error getting cached document:", error);
   });
   }
-  
   // The reverse of GetEvent(eventID)
   // Takes in payload of form {event_name: "event_name", time: "time", eventID: "eventID", template: Array(), time_heat_map: Array()}
   // Creates or updates an event. Then sets name, time, and template property of event to name, time, template
@@ -77,7 +76,6 @@ export async function GetEvent (eventID){
       console.error("Error writing document: ", error);
     });
   }
-  
   // Call this on any user with userID in event with eventID
   // Creates or updates a user in event. Then sets name and schedule property of user to name and schedule
   export function CreateOrUpdateUserInEvent(eventID, userID, name, schedule){
@@ -95,7 +93,6 @@ export async function GetEvent (eventID){
       console.error("Error writing document: ", error);
     });
   }
-  
   // Call this on any event with eventID and it will tally up all the schedules and save it to time_heat_map of event
   function UpdateBestTime (eventID){
     // Reference to event
@@ -127,11 +124,10 @@ export async function GetEvent (eventID){
         });
       });
     }).catch(function(error) {
-      console.log("Error getting cached document:", error);
-  });
-  
-  
-  }
+      console.log("Error getting event snapshot:", error);
+    });
+}
+
 
 
 //   {CreateOrUpdateEvent({event_name: "Hello", time: "time", eventID: "event3", template: [1,0,0,1], time_heat_map: [1,0,0,1]})}
